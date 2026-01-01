@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Modern Todo App</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      background: #ffffff;
+      width: 350px;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 5px;
+    }
+    button:hover {
+      opacity: 0.9;
+      transform: scale(1.02);
+    }
+    .link {
+      text-align: center;
+      margin-top: 15px;
+      color: #667eea;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .hidden { display: none; }
+
+    /* Todo styles */
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 15px;
+    }
+    li {
+      background: #f3f3f3;
+      padding: 10px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    li button {
+      width: auto;
+      padding: 5px 10px;
+      background: #ff5c5c;
+      font-size: 13px;
+    }
+    li button:hover {
+      background: #ff3b3b;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Signup -->
+  <div class="container" id="signupBox">
+    <h2>Create Account</h2>
+    <input type="text" id="suUser" placeholder="Username">
+    <input type="password" id="suPass" placeholder="Password">
+    <button onclick="signup()">Sign Up</button>
+    <div class="link" onclick="showLogin()">Already have an account? Login</div>
+  </div>
+
+  <!-- Login -->
+  <div class="container hidden" id="loginBox">
+    <h2>Welcome Back</h2>
+    <input type="text" id="liUser" placeholder="Username">
+    <input type="password" id="liPass" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <div class="link" onclick="showSignup()">Create new account</div>
+  </div>
+
+  <!-- Todo -->
+  <div class="container hidden" id="todoBox">
+    <h2>My Todo List</h2>
+    <input type="text" id="todoInput" placeholder="Add a new task">
+    <button onclick="addTodo()">Add Task</button>
+    <ul id="todoList"></ul>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <script>
+    function signup() {
+      let u = suUser.value;
+      let p = suPass.value;
+      if (!u || !p) return alert('Fill all fields');
+      localStorage.setItem('username', u);
+      localStorage.setItem('password', p);
+      alert('Signup successful');
+      showLogin();
+    }
+
+    function login() {
+      if (liUser.value === localStorage.getItem('username') &&
+          liPass.value === localStorage.getItem('password')) {
+        loginBox.classList.add('hidden');
+        todoBox.classList.remove('hidden');
+      } else alert('Invalid login');
+    }
+
+    function logout() {
+      todoBox.classList.add('hidden');
+      loginBox.classList.remove('hidden');
+    }
+
+    function addTodo() {
+      if (!todoInput.value) return;
+      let li = document.createElement('li');
+      li.innerHTML = `${todoInput.value} <button onclick="this.parentElement.remove()">X</button>`;
+      todoList.appendChild(li);
+      todoInput.value = '';
+    }
+
+    function showLogin() {
+      signupBox.classList.add('hidden');
+      loginBox.classList.remove('hidden');
+    }
+
+    function showSignup() {
+      loginBox.classList.add('hidden');
+      signupBox.classList.remove('hidden');
+    }
+  </script>
+
+</body>
+</html>
